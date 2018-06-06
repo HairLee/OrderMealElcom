@@ -7,7 +7,13 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name=".AApp"
@@ -17,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.ui.activity.QuickBloxActivity">
+        <activity android:name=".view.ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +32,10 @@
         </activity>
         <activity android:name=".view.ui.activity.OrderMealScheduleActivity" />
         <activity android:name=".view.ui.activity.MainActivity" />
-        <activity android:name=".view.ui.activity.HomeActivity"></activity>
+        <activity android:name=".view.ui.activity.HomeActivity"/>
+        <activity android:name=".view.ui.activity.LoginActivity"/>
+        <activity android:name=".view.ui.activity.OpponentsActivity"/>
+        <activity android:name=".view.ui.activity.SettingsActivity"/>
     </application>
 
 </manifest>

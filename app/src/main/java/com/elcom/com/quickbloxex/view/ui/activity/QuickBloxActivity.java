@@ -20,18 +20,13 @@ import java.util.ArrayList;
 
 public class QuickBloxActivity extends AppCompatActivity {
 
-    static final String APP_ID = "71384";
-    static final String AUTH_KEY = "uVSv7X7T4Op4NDE";
-    static final String AUTH_SECRET = "QuQ6BEYSv58jGTh";
-    static final String ACCOUNT_KEY = "fgsu3KmxXmJmffRe5AoF";
     private static final String TAG = "QuickBloxActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_blox);
-        QBSettings.getInstance().init(getApplicationContext(), APP_ID, AUTH_KEY, AUTH_SECRET);
-        QBSettings.getInstance().setAccountKey(ACCOUNT_KEY);
+
         signUpQuick();
 
         Button btnLogin = findViewById(R.id.btnLogin);

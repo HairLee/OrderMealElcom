@@ -1,17 +1,12 @@
 package com.elcom.com.quickbloxex.util;
 
 import android.os.Bundle;
+import android.util.Log;
 
-import com.quickblox.chat.QBRestChatService;
-import com.quickblox.chat.model.QBChatDialog;
-import com.quickblox.chat.model.QBDialogType;
-import com.quickblox.chat.request.QBDialogRequestBuilder;
-import com.quickblox.chat.utils.DialogUtils;
+import com.quickblox.auth.QBAuth;
+import com.quickblox.auth.session.QBSession;
 import com.quickblox.core.QBEntityCallback;
-import com.quickblox.core.exception.QBResponseException;
-import com.quickblox.core.helper.StringifyArrayList;
 import com.quickblox.core.request.QBPagedRequestBuilder;
-import com.quickblox.core.request.QBRequestGetBuilder;
 import com.quickblox.users.QBUsers;
 import com.quickblox.users.model.QBUser;
 
@@ -38,60 +33,8 @@ public class QBResRequestExecutor {
         QBUsers.deleteUser(currentQbUserID).performAsync(callback);
     }
 
-    public void loadDialogs(final QBEntityCallback<ArrayList<QBChatDialog>> callback) {
-        QBRequestGetBuilder requestBuilder = new QBRequestGetBuilder();
-        requestBuilder.setLimit(100);
-
-
-        QBRestChatService.getChatDialogs(QBDialogType.GROUP, requestBuilder).performAsync(callback);
-//        QBRestChatService.getChatDialogs(null, requestBuilder).performAsync(callback);
-    }
-
-    public void loadDialogByID(String dialogId, final QBEntityCallback<QBChatDialog> callback) {
-        QBRestChatService.getChatDialogById(dialogId).performAsync(callback);
-    }
-
-
-    public void deleteDialog(QBChatDialog qbDialog, QBEntityCallback<Void> callback) {
-        QBRestChatService.deleteDialog(qbDialog.getDialogId(), false)
-                .performAsync(callback);
-    }
-
-    public void deleteDialogs(Collection<QBChatDialog> dialogs, final QBEntityCallback<ArrayList<String>> callback) {
-        StringifyArrayList<String> dialogsIds = new StringifyArrayList<>();
-        for (QBChatDialog dialog : dialogs) {
-            dialogsIds.add(dialog.getDialogId());
-        }
-
-        QBRestChatService.deleteDialogs(dialogsIds, false, null).performAsync(callback);
-    }
-
-    public void createDialogWithSelectedUsers(final List<QBUser> users, QBUser currentUser,
-                                              final QBEntityCallback<QBChatDialog> callback) {
-
-        QBRestChatService.createChatDialog(createDialog(users, currentUser)).performAsync(new QBEntityCallback<QBChatDialog>() {
-            @Override
-            public void onSuccess(QBChatDialog dialog, Bundle args) {
-//                        QbDialogHolder.getInstance().addDialog(dialog);
-//                        QbUsersHolder.getInstance().putUsers(users);
-                callback.onSuccess(dialog, args);
-            }
-
-            @Override
-            public void onError(QBResponseException responseException) {
-                callback.onError(responseException);
-            }
-        });
-    }
-
-    private static QBChatDialog createDialog(List<QBUser> users, QBUser currentUser) {
-        return DialogUtils.buildDialog(DialogUtils.createChatNameFromUserList(users.toArray(new QBUser[users.size()])),
-                QBDialogType.GROUP, DialogUtils.getUserIds(users));
-    }
-
     public void loadUsersByTag(final String tag, final QBEntityCallback<ArrayList<QBUser>> callback) {
         QBPagedRequestBuilder requestBuilder = new QBPagedRequestBuilder();
-        requestBuilder.setPerPage(50);
         List<String> tags = new LinkedList<>();
         tags.add(tag);
 
@@ -100,12 +43,5 @@ public class QBResRequestExecutor {
 
     public void loadUsersByIds(final Collection<Integer> usersIDs, final QBEntityCallback<ArrayList<QBUser>> callback) {
         QBUsers.getUsersByIDs(usersIDs, null).performAsync(callback);
-    }
-
-    public void updateDialog(QBChatDialog dialog, QBUser[] users, QBEntityCallback<QBChatDialog> callback) {
-        QBDialogRequestBuilder requestBuilder = new QBDialogRequestBuilder();
-        requestBuilder.addUsers(users);
-
-        QBRestChatService.updateGroupChatDialog(dialog, requestBuilder).performAsync(callback);
     }
 }
